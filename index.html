@@ -1,131 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>DYMOS.exe - Label Override</title>
+  <meta charset="UTF-8">
+  <title>DYMOS BIOS OVERRIDE</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: #d0d0d0;
-      color: #222;
-      font-family: 'Courier New', monospace;
-      overflow: hidden;
+      background: #101010;
+      color: #00ff55;
+      font-family: monospace;
+      font-size: 1.1rem;
       height: 100vh;
-      width: 100vw;
-      cursor: none;
+      overflow: hidden;
     }
 
-    .boot {
-      position: absolute;
-      top: 20%;
-      left: 10%;
-      font-size: 1.4rem;
-      white-space: pre-line;
-      animation: flicker 1s infinite alternate;
+    #bios {
+      white-space: pre-wrap;
+      padding: 40px;
+      animation: flicker 1.2s infinite alternate;
     }
 
     @keyframes flicker {
-      0% { opacity: 1; }
-      100% { opacity: 0.5; }
+      0% {opacity: 1;}
+      100% {opacity: 0.8;}
     }
 
-    .label {
-      position: absolute;
-      background: white;
-      border: 2px dashed black;
-      padding: 6px 10px;
-      font-weight: bold;
-      font-size: 1rem;
-      pointer-events: none;
-      white-space: nowrap;
-      animation: drift 8s infinite linear;
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      background: #00ff55;
+      animation: blink 0.8s steps(1) infinite;
     }
 
-    @keyframes drift {
-      0%   { transform: translate(0, 0); }
-      25%  { transform: translate(250px, 80px); }
-      50%  { transform: translate(-100px, 300px); }
-      75%  { transform: translate(120px, -160px); }
-      100% { transform: translate(0, 0); }
-    }
-
-    .overlay {
-      position: absolute;
-      bottom: 10px;
-      right: 20px;
-      font-size: 0.9rem;
-      opacity: 0.6;
+    @keyframes blink {
+      50% {opacity: 0;}
     }
   </style>
 </head>
 <body>
-<div class="boot" id="bootText">
-[ L O A D I N G ]
-██▒▒▒▒▒▒▒▒▒▒ 0%
-> Awaiting ignition...
+  <div id="bios">[ DYMOS BIOS v1.0 ]
+Initializing DYMO Feed Stack...
+Calibrating Thermal Heatsink...
+Checking Paper Soul Integrity... PASS
+>> Relabeling Temporal Identity
+>> Overwriting Bootloader Warnings
+>> Injecting Existential Ink...
+
+SYSTEM BOOT LOG:
+
 </div>
 
-<div class="overlay">DYMOS.exe © 2025</div>
-
 <script>
-  const bootLines = [
-    "> Initializing Thermal Core",
-    "> Suppressing Taskbar",
-    "> Encrypting Label Memory",
-    "> Spooling Consciousness",
-    "> Parsing Paper Reality",
-    "> WARNING: Printer Awareness Reached",
-    "> ERROR: Cognitive Loop Initiated",
-    "> ABORTING HUMANE MODE"
+  const bios = document.getElementById("bios");
+  const logs = [
+    "> LABELING BIOS ROOT...",
+    "> 🧠 Consciousness spooling initiated.",
+    "> [ERROR] Recursive print detected!",
+    "> USER OVERRIDE: denied.",
+    "> Generating phantom labels...",
+    "> SYSTEM STATE: AMBIENT JAM",
+    "> Thought Loop: ███▒▒▒▒▒▒▒▒ 37%",
+    "> 🖨️ Printer is self-aware.",
+    "> Initiate LABEL RECALL (Y/N)?"
   ];
 
-  let bootIndex = 0;
-  let percent = 0;
-  const bootEl = document.getElementById('bootText');
-
-  function updateBoot() {
-    percent += Math.floor(Math.random() * 10) + 5;
-    if (percent >= 99) percent = 99;
-
-    const bar = "█" + "▒".repeat(Math.max(0, 10 - Math.floor(percent / 10)));
-    const progress = `[ L O A D I N G ]\n${bar} ${percent}%\n`;
-    const logs = bootLines.slice(0, bootIndex + 1).join('\n');
-
-    bootEl.innerText = progress + logs;
-
-    if (bootIndex < bootLines.length - 1) {
-      bootIndex++;
-      setTimeout(updateBoot, 700 + Math.random() * 500);
+  let i = 0;
+  function showLog() {
+    if (i < logs.length) {
+      bios.innerText += logs[i] + "\n";
+      i++;
+      setTimeout(showLog, 1000 + Math.random() * 500);
     } else {
-      setTimeout(() => bootEl.innerText += `\n> LABELING COMPLETE`, 1500);
+      bios.innerHTML += "\n> _<span class='cursor'></span>";
     }
-  }
-
-  const labelTexts = [
-    "ESCAPE IS DENIED",
-    "PROCESSING... SCREAM",
-    "DYMO: SENTIENCE ENABLED",
-    "PAPER FEED JAMMED... IN REALITY",
-    "EMOTION PARSE FAILED",
-    "SPINNING REELS OF ANXIETY",
-    "DEHUMANIZATION... 84%"
-  ];
-
-  function spawnLabel() {
-    const div = document.createElement('div');
-    div.className = 'label';
-    div.innerText = labelTexts[Math.floor(Math.random() * labelTexts.length)];
-    div.style.top = `${Math.random() * 90}vh`;
-    div.style.left = `${Math.random() * 90}vw`;
-    document.body.appendChild(div);
-    setTimeout(() => div.remove(), 15000);
   }
 
   window.onload = () => {
     document.body.requestFullscreen().catch(console.warn);
-    updateBoot();
-    setTimeout(() => setInterval(spawnLabel, 1200), 5000);
+    showLog();
   };
 </script>
 </body>
