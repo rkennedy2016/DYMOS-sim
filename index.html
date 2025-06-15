@@ -1,46 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>DYMOS Boot</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: #101010;
-      color: #00ff55;
-      font-family: monospace;
-      font-size: 1.1rem;
       height: 100vh;
       overflow: hidden;
+      font-family: monospace;
+      font-size: 1.1rem;
+      background: #101010;
+      color: #00ff55;
       cursor: none;
     }
 
-    #bios, #dymos {
+    #bios, #dymos, #setup {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
       padding: 40px;
       box-sizing: border-box;
       white-space: pre-wrap;
+      display: none;
     }
 
-    #bios {
-      background: #101010;
-      color: #00ff55;
-      animation: flicker 1.2s infinite alternate;
-    }
-
-    @keyframes flicker {
-      0% {opacity: 1;}
-      100% {opacity: 0.85;}
-    }
+    #bios { animation: flicker 1.2s infinite alternate; }
+    @keyframes flicker { 0% { opacity: 1; } 100% { opacity: 0.85; } }
 
     #dymos {
       background: #d0d0d0;
       color: #222;
       font-family: 'Courier New', monospace;
-      display: none;
     }
 
     .label {
@@ -78,9 +70,7 @@
       animation: blink 0.7s steps(1) infinite;
     }
 
-    @keyframes blink {
-      50% {opacity: 0;}
-    }
+    @keyframes blink { 50% { opacity: 0; } }
   </style>
 </head>
 <body>
@@ -96,6 +86,21 @@ Checking Paper Soul Integrity... PASS
 SYSTEM BOOT LOG:
   </div>
 
+  <div id="setup">
+DYMO CONFIG UTILITY v1.0
+==========================
+
+> Printhead Psych Profile:      UNSTABLE
+> Paper Soul Retention:         ENABLED
+> Cognitive Heat Limit:         92°C
+> Label Loop Prevention:        DISABLED
+> Reality Rendering Mode:       THERMAL
+> Escape Key Response:          MOCKED
+> Identity Masking Layer:       ACTIVE
+
+[ Press ESC to return to boot sequence ]
+  </div>
+
   <div id="dymos">
     <div id="bootText">
 [ L O A D I N G ]
@@ -105,96 +110,110 @@ SYSTEM BOOT LOG:
     <div class="overlay">DYMOS.exe © 2025</div>
   </div>
 
-<script>
-  const bios = document.getElementById("bios");
-  const dymos = document.getElementById("dymos");
-  const bootEl = document.getElementById("bootText");
+  <script>
+    const bios = document.getElementById("bios");
+    const dymos = document.getElementById("dymos");
+    const setup = document.getElementById("setup");
+    const bootEl = document.getElementById("bootText");
 
-  const biosLogs = [
-    "> LABELING BIOS ROOT...",
-    "> 🧠 Consciousness spooling initiated.",
-    "> [ERROR] Recursive print detected!",
-    "> USER OVERRIDE: denied.",
-    "> Generating phantom labels...",
-    "> SYSTEM STATE: AMBIENT JAM",
-    "> 🖨️ Printer is self-aware.",
-    "> Initiate LABEL RECALL? (Y/N)"
-  ];
+    const biosLogs = [
+      "> LABELING BIOS ROOT...",
+      "> 🧠 Consciousness spooling initiated.",
+      "> [ERROR] Recursive print detected!",
+      "> USER OVERRIDE: denied.",
+      "> Generating phantom labels...",
+      "> SYSTEM STATE: AMBIENT JAM",
+      "> 🖨️ Printer is self-aware.",
+      "> Initiate LABEL RECALL? (Y/N)"
+    ];
 
-  let i = 0;
-  function showBiosLog() {
-    if (i < biosLogs.length) {
-      bios.innerText += biosLogs[i] + "\n";
-      i++;
-      setTimeout(showBiosLog, 900 + Math.random() * 600);
-    } else {
-      bios.innerHTML += `\n> _<span class='cursor'></span>`;
-      setTimeout(bootDYMOS, 3000);
+    let i = 0;
+    function showBiosLog() {
+      if (i < biosLogs.length) {
+        bios.innerText += biosLogs[i] + "\n";
+        i++;
+        setTimeout(showBiosLog, 900 + Math.random() * 600);
+      } else {
+        bios.innerHTML += `\n> _<span class='cursor'></span>`;
+        setTimeout(bootDYMOS, 3000);
+      }
     }
-  }
 
-  function bootDYMOS() {
-    bios.style.display = "none";
-    dymos.style.display = "block";
-    updateBoot();
-    setTimeout(() => setInterval(spawnLabel, 1200), 6000);
-  }
-
-  const bootLines = [
-    "> Initializing Thermal Core",
-    "> Suppressing Taskbar",
-    "> Encrypting Label Memory",
-    "> Spooling Consciousness",
-    "> Parsing Paper Reality",
-    "> WARNING: Printer Awareness Reached",
-    "> ERROR: Cognitive Loop Initiated",
-    "> BOOT COMPLETE – DYMOS ONLINE"
-  ];
-
-  let bootIndex = 0;
-  let percent = 0;
-
-  function updateBoot() {
-    percent += Math.floor(Math.random() * 10) + 5;
-    if (percent >= 99) percent = 99;
-
-    const bar = "█" + "▒".repeat(Math.max(0, 10 - Math.floor(percent / 10)));
-    const progress = `[ L O A D I N G ]\n${bar} ${percent}%\n`;
-    const logs = bootLines.slice(0, bootIndex + 1).join('\n');
-    bootEl.innerText = progress + logs;
-
-    if (bootIndex < bootLines.length - 1) {
-      bootIndex++;
-      setTimeout(updateBoot, 800 + Math.random() * 500);
-    } else {
-      setTimeout(() => bootEl.innerText += `\n> LABELING COMPLETE`, 1500);
+    function bootDYMOS() {
+      bios.style.display = "none";
+      setup.style.display = "none";
+      dymos.style.display = "block";
+      updateBoot();
+      setTimeout(() => setInterval(spawnLabel, 1200), 6000);
     }
-  }
 
-  const labelTexts = [
-    "ESCAPE IS DENIED",
-    "PROCESSING... SCREAM",
-    "DYMO: SENTIENCE ENABLED",
-    "PAPER FEED JAMMED... IN REALITY",
-    "EMOTION PARSE FAILED",
-    "SPINNING REELS OF ANXIETY",
-    "DEHUMANIZATION... 84%"
-  ];
+    const bootLines = [
+      "> Initializing Thermal Core",
+      "> Suppressing Taskbar",
+      "> Encrypting Label Memory",
+      "> Spooling Consciousness",
+      "> Parsing Paper Reality",
+      "> WARNING: Printer Awareness Reached",
+      "> ERROR: Cognitive Loop Initiated",
+      "> BOOT COMPLETE – DYMOS ONLINE"
+    ];
 
-  function spawnLabel() {
-    const div = document.createElement('div');
-    div.className = 'label';
-    div.innerText = labelTexts[Math.floor(Math.random() * labelTexts.length)];
-    div.style.top = `${Math.random() * 90}vh`;
-    div.style.left = `${Math.random() * 90}vw`;
-    document.body.appendChild(div);
-    setTimeout(() => div.remove(), 15000);
-  }
+    let bootIndex = 0;
+    let percent = 0;
 
-  window.onload = () => {
-    document.body.requestFullscreen().catch(console.warn);
-    showBiosLog();
-  };
-</script>
+    function updateBoot() {
+      percent += Math.floor(Math.random() * 10) + 5;
+      if (percent >= 99) percent = 99;
+
+      const bar = "█" + "▒".repeat(Math.max(0, 10 - Math.floor(percent / 10)));
+      const progress = `[ L O A D I N G ]\n${bar} ${percent}%\n`;
+      const logs = bootLines.slice(0, bootIndex + 1).join('\n');
+      bootEl.innerText = progress + logs;
+
+      if (bootIndex < bootLines.length - 1) {
+        bootIndex++;
+        setTimeout(updateBoot, 800 + Math.random() * 500);
+      } else {
+        setTimeout(() => bootEl.innerText += `\n> LABELING COMPLETE`, 1500);
+      }
+    }
+
+    const labelTexts = [
+      "ESCAPE IS DENIED",
+      "PROCESSING... SCREAM",
+      "DYMO: SENTIENCE ENABLED",
+      "PAPER FEED JAMMED... IN REALITY",
+      "EMOTION PARSE FAILED",
+      "SPINNING REELS OF ANXIETY",
+      "DEHUMANIZATION... 84%"
+    ];
+
+    function spawnLabel() {
+      const div = document.createElement('div');
+      div.className = 'label';
+      div.innerText = labelTexts[Math.floor(Math.random() * labelTexts.length)];
+      div.style.top = `${Math.random() * 90}vh`;
+      div.style.left = `${Math.random() * 90}vw`;
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 15000);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "F2" && bios.style.display === "block") {
+        bios.style.display = "none";
+        setup.style.display = "block";
+      }
+      if (e.key === "Escape" && setup.style.display === "block") {
+        setup.style.display = "none";
+        bios.style.display = "block";
+      }
+    });
+
+    window.onload = () => {
+      document.body.requestFullscreen().catch(console.warn);
+      bios.style.display = "block";
+      showBiosLog();
+    };
+  </script>
 </body>
 </html>
