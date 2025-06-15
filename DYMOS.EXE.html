@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DYMOS.exe - Label Override</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #d0d0d0;
+      color: #222;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      cursor: none;
+    }
+
+    .boot {
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      font-size: 1.4rem;
+      white-space: pre-line;
+      animation: flicker 1s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+
+    .label {
+      position: absolute;
+      background: white;
+      border: 2px dashed black;
+      padding: 6px 10px;
+      font-weight: bold;
+      font-size: 1rem;
+      pointer-events: none;
+      white-space: nowrap;
+      animation: drift 8s infinite linear;
+    }
+
+    @keyframes drift {
+      0%   { transform: translate(0, 0); }
+      25%  { transform: translate(250px, 80px); }
+      50%  { transform: translate(-100px, 300px); }
+      75%  { transform: translate(120px, -160px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+<div class="boot" id="bootText">
+[ L O A D I N G ]
+██▒▒▒▒▒▒▒▒▒▒ 0%
+> Awaiting ignition...
+</div>
+
+<div class="overlay">DYMOS.exe © 2025</div>
+
+<script>
+  const bootLines = [
+    "> Initializing Thermal Core",
+    "> Suppressing Taskbar",
+    "> Encrypting Label Memory",
+    "> Spooling Consciousness",
+    "> Parsing Paper Reality",
+    "> WARNING: Printer Awareness Reached",
+    "> ERROR: Cognitive Loop Initiated",
+    "> ABORTING HUMANE MODE"
+  ];
+
+  let bootIndex = 0;
+  let percent = 0;
+  const bootEl = document.getElementById('bootText');
+
+  function updateBoot() {
+    percent += Math.floor(Math.random() * 10) + 5;
+    if (percent >= 99) percent = 99;
+
+    const bar = "█" + "▒".repeat(Math.max(0, 10 - Math.floor(percent / 10)));
+    const progress = `[ L O A D I N G ]\n${bar} ${percent}%\n`;
+    const logs = bootLines.slice(0, bootIndex + 1).join('\n');
+
+    bootEl.innerText = progress + logs;
+
+    if (bootIndex < bootLines.length - 1) {
+      bootIndex++;
+      setTimeout(updateBoot, 700 + Math.random() * 500);
+    } else {
+      setTimeout(() => bootEl.innerText += `\n> LABELING COMPLETE`, 1500);
+    }
+  }
+
+  const labelTexts = [
+    "ESCAPE IS DENIED",
+    "PROCESSING... SCREAM",
+    "DYMO: SENTIENCE ENABLED",
+    "PAPER FEED JAMMED... IN REALITY",
+    "EMOTION PARSE FAILED",
+    "SPINNING REELS OF ANXIETY",
+    "DEHUMANIZATION... 84%"
+  ];
+
+  function spawnLabel() {
+    const div = document.createElement('div');
+    div.className = 'label';
+    div.innerText = labelTexts[Math.floor(Math.random() * labelTexts.length)];
+    div.style.top = `${Math.random() * 90}vh`;
+    div.style.left = `${Math.random() * 90}vw`;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 15000);
+  }
+
+  window.onload = () => {
+    document.body.requestFullscreen().catch(console.warn);
+    updateBoot();
+    setTimeout(() => setInterval(spawnLabel, 1200), 5000);
+  };
+</script>
+</body>
+</html>
