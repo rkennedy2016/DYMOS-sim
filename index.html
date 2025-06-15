@@ -1,103 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <title>DYMOS Boot</title>
+  <title>DYMOS BIOS</title>
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100vh;
-      overflow: hidden;
-      font-family: monospace;
-      font-size: 1.1rem;
       background: #101010;
       color: #00ff55;
-      cursor: none;
+      font-family: monospace;
+      font-size: 1.1rem;
+      overflow: hidden;
     }
-
-    #bios, #dymos, #setup {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+    #bios, #setup, #desktop {
       padding: 40px;
-      box-sizing: border-box;
-      white-space: pre-wrap;
+      white-space: pre;
       display: none;
     }
-
-    #bios { animation: flicker 1.2s infinite alternate; }
-    @keyframes flicker { 0% { opacity: 1; } 100% { opacity: 0.85; } }
-
-    #dymos {
-      background: #d0d0d0;
-      color: #222;
-      font-family: 'Courier New', monospace;
-    }
-
-    .label {
-      position: absolute;
-      background: white;
-      border: 2px dashed black;
-      padding: 6px 10px;
-      font-weight: bold;
-      font-size: 1rem;
-      pointer-events: none;
-      white-space: nowrap;
-      animation: drift 10s infinite linear;
-    }
-
-    @keyframes drift {
-      0% { transform: translate(0, 0); }
-      25% { transform: translate(300px, 100px); }
-      50% { transform: translate(-100px, 400px); }
-      75% { transform: translate(200px, -200px); }
-      100% { transform: translate(0, 0); }
-    }
-
-    .overlay {
-      position: absolute;
-      bottom: 10px;
-      right: 20px;
-      font-size: 0.9rem;
-      opacity: 0.6;
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      background: #00ff55;
-      animation: blink 0.7s steps(1) infinite;
-    }
-
-    @keyframes blink { 50% { opacity: 0; } }
-
     .selected {
       background: #00ff55;
       color: #101010;
     }
+    #desktop {
+      background: black;
+      color: #00ffff;
+    }
   </style>
 </head>
 <body>
-  <div id="bios">
-[ DYMOS BIOS v1.0 ]
+  <div id="bios">[ DYMOS BIOS v1.0 ]
 Initializing DYMO Feed Stack...
 Calibrating Thermal Heatsink...
 Checking Paper Soul Integrity... PASS
->> Relabeling Temporal Identity
->> Overwriting Bootloader Warnings
->> Injecting Existential Ink...
 
-SYSTEM BOOT LOG:
-  </div>
+Press F2 to enter Setup</div>
 
   <div id="setup"></div>
+  <div id="desktop"></div>
 
-  <div id="dymos">
-    <div id="bootText">
-[ L O A D I N G ]
-██▒▒▒▒▒▒▒▒▒▒ 0%
-> Awaiting ignition...
-    </div>
-    <div class="overlay">DYMOS.exe © 2025</div>
-  </div>
+  <script>
+    const bios = document.getElementById("bios");
+    const setup = document.getElementById("setup");
+    const desktop = document.getElementById("desktop");
+
+    const options = [
+      { label: "Printhead Psych Profile", values: ["UNSTABLE", "GLITCHING", "CALM"], index: 0 },
+      { label: "Paper Soul Retention", values: ["ENABLED", "DISABLED"], index: 0 },
+      { label: "Label Loop Prevention", values: ["DISABLED", "ENABLED", "CORRUPTED"], index: 0 },
+      { label: "Reality Rendering Mode", values: ["THERMAL", "VECTOR", "VOID"], index: 0 }
+    ];
+    let selected = 0;
+
+    function renderSetup() {
+      setup.innerHTML = "DYMOS CONFIG UTILITY v1.0\n==========================\n\n";
+      options.forEach((opt, i) => {
+        let line = `> ${opt.label}: ${opt.values[opt.index]}`;
+        if (i === selected) line = `<span class='selected'>${line}</span>`;
+        setup.innerHTML += line + "\n";
+      });
+      setup.innerHTML += "\n[ ↑ ↓ ← → to change  |  ESC to exit ]";
+    }
+
+    function checkDesktopTrigger() {
+      return (
+        options[0].values[options[0].index] === "UNSTABLE" &&
+        options[1].values[options[1].index] === "ENABLED" &&
+        options[2].values[options[2].index] === "ENABLED" &&
+        options[3].values[options[3].index] === "VECTOR"
+      );
+    }
+
+    function showDesktop() {
+      bios.style.display = "none";
+      setup.style.display = "none";
+      desktop.style.display = "block";
+      desktop.innerText =
+        "[ DYMOS Desktop v0.0.1-BETA ]\n\n" +
+        "> Launching Ambient Chaos Interface...\n" +
+        "> Reticulating label streams...\n" +
+        "> 🧾 DESKTOP STABILITY: CRITICAL\n" +
+        "> 💀 REVERTING TO BIOS...";
+
+      setTimeout(() => {
+        desktop.style.display = "none";
+        bios.style.display = "block";
+      }, 3000);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "F2") {
+        bios.style.display = "none";
+        setup.style.display = "block";
+        renderSetup();
+      } else if (setup.style.display === "block") {
+        if (e.key === "ArrowDown") {
+          selected = (selected + 1) % options.length;
+          renderSetup();
+        }
+        if (e.key === "ArrowUp") {
+          selected = (selected - 1 + options.length) % options.length;
+          renderSetup();
+        }
+        if (e.key === "ArrowRight") {
+          options[selected].index = (options[selected].index + 1) % options[selected].values.length;
+          renderSetup();
+        }
+        if (e.key === "ArrowLeft") {
+          options[selected].index = (options[selected].index - 1 + options[selected].values.length) % options[selected].values.length;
+          renderSetup();
+        }
+        if (e.key === "Escape") {
+          if (checkDesktopTrigger()) {
+            showDesktop();
+          } else {
+            setup.style.display = "none";
+            bios.style.display = "block";
+          }
+        }
+      }
+    });
+
+    window.onload = () => {
+      bios.style.display = "block";
+    };
+  </script>
+</body>
+</html>
