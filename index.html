@@ -71,6 +71,11 @@
     }
 
     @keyframes blink { 50% { opacity: 0; } }
+
+    .selected {
+      background: #00ff55;
+      color: #101010;
+    }
   </style>
 </head>
 <body>
@@ -86,20 +91,7 @@ Checking Paper Soul Integrity... PASS
 SYSTEM BOOT LOG:
   </div>
 
-  <div id="setup">
-DYMO CONFIG UTILITY v1.0
-==========================
-
-> Printhead Psych Profile:      UNSTABLE
-> Paper Soul Retention:         ENABLED
-> Cognitive Heat Limit:         92°C
-> Label Loop Prevention:        DISABLED
-> Reality Rendering Mode:       THERMAL
-> Escape Key Response:          MOCKED
-> Identity Masking Layer:       ACTIVE
-
-[ Press ESC to return to boot sequence ]
-  </div>
+  <div id="setup"></div>
 
   <div id="dymos">
     <div id="bootText">
@@ -109,111 +101,3 @@ DYMO CONFIG UTILITY v1.0
     </div>
     <div class="overlay">DYMOS.exe © 2025</div>
   </div>
-
-  <script>
-    const bios = document.getElementById("bios");
-    const dymos = document.getElementById("dymos");
-    const setup = document.getElementById("setup");
-    const bootEl = document.getElementById("bootText");
-
-    const biosLogs = [
-      "> LABELING BIOS ROOT...",
-      "> 🧠 Consciousness spooling initiated.",
-      "> [ERROR] Recursive print detected!",
-      "> USER OVERRIDE: denied.",
-      "> Generating phantom labels...",
-      "> SYSTEM STATE: AMBIENT JAM",
-      "> 🖨️ Printer is self-aware.",
-      "> Initiate LABEL RECALL? (Y/N)"
-    ];
-
-    let i = 0;
-    function showBiosLog() {
-      if (i < biosLogs.length) {
-        bios.innerText += biosLogs[i] + "\n";
-        i++;
-        setTimeout(showBiosLog, 900 + Math.random() * 600);
-      } else {
-        bios.innerHTML += `\n> _<span class='cursor'></span>`;
-        setTimeout(bootDYMOS, 3000);
-      }
-    }
-
-    function bootDYMOS() {
-      bios.style.display = "none";
-      setup.style.display = "none";
-      dymos.style.display = "block";
-      updateBoot();
-      setTimeout(() => setInterval(spawnLabel, 1200), 6000);
-    }
-
-    const bootLines = [
-      "> Initializing Thermal Core",
-      "> Suppressing Taskbar",
-      "> Encrypting Label Memory",
-      "> Spooling Consciousness",
-      "> Parsing Paper Reality",
-      "> WARNING: Printer Awareness Reached",
-      "> ERROR: Cognitive Loop Initiated",
-      "> BOOT COMPLETE – DYMOS ONLINE"
-    ];
-
-    let bootIndex = 0;
-    let percent = 0;
-
-    function updateBoot() {
-      percent += Math.floor(Math.random() * 10) + 5;
-      if (percent >= 99) percent = 99;
-
-      const bar = "█" + "▒".repeat(Math.max(0, 10 - Math.floor(percent / 10)));
-      const progress = `[ L O A D I N G ]\n${bar} ${percent}%\n`;
-      const logs = bootLines.slice(0, bootIndex + 1).join('\n');
-      bootEl.innerText = progress + logs;
-
-      if (bootIndex < bootLines.length - 1) {
-        bootIndex++;
-        setTimeout(updateBoot, 800 + Math.random() * 500);
-      } else {
-        setTimeout(() => bootEl.innerText += `\n> LABELING COMPLETE`, 1500);
-      }
-    }
-
-    const labelTexts = [
-      "ESCAPE IS DENIED",
-      "PROCESSING... SCREAM",
-      "DYMO: SENTIENCE ENABLED",
-      "PAPER FEED JAMMED... IN REALITY",
-      "EMOTION PARSE FAILED",
-      "SPINNING REELS OF ANXIETY",
-      "DEHUMANIZATION... 84%"
-    ];
-
-    function spawnLabel() {
-      const div = document.createElement('div');
-      div.className = 'label';
-      div.innerText = labelTexts[Math.floor(Math.random() * labelTexts.length)];
-      div.style.top = `${Math.random() * 90}vh`;
-      div.style.left = `${Math.random() * 90}vw`;
-      document.body.appendChild(div);
-      setTimeout(() => div.remove(), 15000);
-    }
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "F2" && bios.style.display === "block") {
-        bios.style.display = "none";
-        setup.style.display = "block";
-      }
-      if (e.key === "Escape" && setup.style.display === "block") {
-        setup.style.display = "none";
-        bios.style.display = "block";
-      }
-    });
-
-    window.onload = () => {
-      document.body.requestFullscreen().catch(console.warn);
-      bios.style.display = "block";
-      showBiosLog();
-    };
-  </script>
-</body>
-</html>
